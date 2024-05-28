@@ -47,6 +47,12 @@ return {
           },
           url = "http://json.schemastore.org/stylelintrc.json",
         },
+        {
+          fileMatch = {
+            "biome.json",
+          },
+          url = "https://biomejs.dev/schemas/1.6.4/schema.json"
+        }
       },
     }
   }

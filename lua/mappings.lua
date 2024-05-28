@@ -1,41 +1,26 @@
 -- prevent yank on paste
 vim.keymap.set("x", "p", "P", { silent = true })
 
+-- replace selected text with confirmation
+-- vim.cmd('vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>')
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>" -- quick save
--- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
--- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.visual_mode["<C-r>"] = '"hy:%s/<C-r>h//gc<left><left><left>' -- replace
+lvim.keys.normal_mode["<C-c>"] = ":%y+<cr>" -- copy all
+lvim.keys.normal_mode["<C-a>"] = "ggVG<cr>" -- select all
+
+lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
--- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
+lvim.keys.normal_mode["<C-q>"] = ":qa!<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
+lvim.keys.normal_mode["<leader>q"] = ":qa!<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
 
--- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
--- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
--- local _, actions = pcall(require, "telescope.actions")
--- lvim.builtin.telescope.defaults.mappings = {
---   -- for input mode
---   i = {
---     ["<C-j>"] = actions.move_selection_next,
---     ["<C-k>"] = actions.move_selection_previous,
---     ["<C-n>"] = actions.cycle_history_next,
---     ["<C-p>"] = actions.cycle_history_prev,
---   },
---   -- for normal mode
---   n = {
---     ["<C-j>"] = actions.move_selection_next,
---     ["<C-k>"] = actions.move_selection_previous,
---   },
--- }
+local search_mappings = lvim.builtin.which_key.mappings["s"]
 
--- -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
---   name = "+Trouble",
---   r = { "<cmd>Trouble lsp_references<cr>", "References" },
---   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
---   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
---   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
---   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
--- }
+lvim.builtin.which_key.mappings["s"] = vim.tbl_extend(
+	"force",
+	search_mappings,
+	{ b = { "<cmd>Telescope buffers<CR>", "Buffers" }, p = { "<cmd>Telescope projects<cr>", "Projects" } }
+)

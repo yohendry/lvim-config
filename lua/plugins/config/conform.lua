@@ -1,46 +1,78 @@
 return function(_, opts)
-	local conform = require("conform")
+  local conform = require("conform")
 
-	lvim.format_on_save.enabled = false
+  lvim.format_on_save.enabled = false
 
-	conform.setup({
-		formatters_by_ft = {
-			lua = { "stylua" },
-			-- Conform will run multiple formatters sequentially
-			python = { "isort", "black" },
-			-- Use a sub-list to run only the first available formatter
-			javascript = { { "prettierd", "biome" } },
-			typescript = { { "prettierd", "biome" } },
-			typescriptreact = { { "prettierd", "biome" } },
-			javascriptreact = { { "prettierd", "biome" } },
-		},
-		format_on_save = {
-			-- I recommend these options. See :help conform.format for details.
-			lsp_fallback = true,
-			timeout_ms = 500,
-		},
-	})
+  local formatters = {
+    lua = { "stylua" },
+    -- Conform will run multiple formatters sequentially
+    python = { "isort", "black" },
+  }
 
-	vim.api.nvim_create_autocmd("BufWritePre", {
-		pattern = "*",
-		callback = function(args)
-			require("conform").format({ bufnr = args.buf })
-		end,
-	})
 
-	vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+  local a = {
+    javascript = {},
+    typescript = {},
+    javascriptreact = {},
+    typescriptreact = {},
+    svelte = {},
+    css = {},
+    html = {},
+    json = {},
+    yaml = {},
+    markdown = {},
+    graphql = {},
 
-	vim.api.nvim_create_user_command("Format", function(args)
-		local range = nil
-		if args.count ~= -1 then
-			local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-			range = {
-				start = { args.line1, 0 },
-				["end"] = { args.line2, end_line:len() },
-			}
-		end
-		require("conform").format({ async = true, lsp_fallback = true, range = range })
-	end, { range = true })
+  }
+  -- if lvim.user.lsp.eslint_prettier or lvim.user.lsp.biome then
+  local file_types_biome = { "javascript", "javascriptreact", "typescript", "typescriptreact", "javascript.tsx",
+    "typescript.tsx", "jso", "jsonc" }
+  local file_types_prettier = { "svelte", "css", "html", "json", "yaml", "markdown", "markdown.mdx", "graphql" }
 
-	-- rewrite which-key format binding
+
+  for _, ft in ipairs(file_types_biome) do
+    table.insert(formatters, { [ft] = { { "prettierd", "biome" } } })
+  end
+
+  for _, ft in ipairs(file_types_prettier) do
+    table.insert(formatters, { [ft] = { { "prettierd" } } })
+  end
+
+
+  -- end
+  vim.tbl_extend("force", opts, { formatters_by_ft = formatters })
+  conform.setup(opts)
+
+
+
+
+
+
+
+
+
+
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*",
+    callback = function(args)
+      vim.print("test")
+      conform.format({ bufnr = args.buf })
+    end,
+  })
+
+  vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+  vim.api.nvim_create_user_command("Format", function(args)
+    local range = nil
+    if args.count ~= -1 then
+      local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+      range = {
+        start = { args.line1, 0 },
+        ["end"] = { args.line2, end_line:len() },
+      }
+    end
+    conform.format({ async = true, lsp_fallback = true, range = range })
+  end, { range = true })
+
+  -- rewrite which-key format binding
 end

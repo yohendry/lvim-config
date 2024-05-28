@@ -1,64 +1,50 @@
 return {
-  {
-    "folke/trouble.nvim",
-    branch = "dev", -- IMPORTANT!
-    config = require("plugins.config.trouble"),
-  },
-  { "dmmulroy/ts-error-translator.nvim", event = "BufRead" },
-  {
-    "f-person/git-blame.nvim",
-    event = "BufRead",
-    config = require("plugins.config.git-blame"),
-  },
-  {
-    "stevearc/dressing.nvim",
-  },
-  {
-    "anuvyklack/pretty-fold.nvim",
-    config = require("plugins.config.pretty-fold"),
-    event = "BufRead",
-  },
-  {
-    "folke/twilight.nvim",
-    opts = require("plugins.opts.twilight"),
-  },
-  {
-    "creativenull/efmls-configs-nvim",
-    dependencies = { "neovim/nvim-lspconfig" },
-  },
-  {
-    "nvimtools/none-ls.nvim",
-    dependencies = {
-      "nvimtools/none-ls-extras.nvim",
-    }
-  }
-  -- {
-  --   "MunifTanjim/eslint.nvim",
-  --   event = "LspAttach",
-  --   dependencies = {
-  --     "neovim/nvim-lspconfig",
-  --   },
-  --   config = function()
-  --     local eslint = require("eslint")
-  --     eslint.setup({
-  --       bin = "eslint_d", -- or `eslint_d`
-  --       code_actions = {
-  --         enable = true,
-  --         apply_on_save = {
-  --           enable = true,
-  --           types = { "directive", "problem", "suggestion", "layout" },
-  --         },
-  --         disable_rule_comment = {
-  --           enable = true,
-  --           location = "separate_line", -- or `same_line`
-  --         },
-  --       },
-  --       diagnostics = {
-  --         enable = true,
-  --         report_unused_disable_directives = false,
-  --         run_on = "type", -- or `save`
-  --       },
-  --     })
-  --   end,
-  -- },
+	{
+		"folke/trouble.nvim",
+		branch = "dev", -- IMPORTANT!
+		config = require("plugins.config.trouble"),
+	},
+	{
+		"f-person/git-blame.nvim",
+		event = "BufRead",
+		config = require("plugins.config.git-blame"),
+	},
+	{
+		"stevearc/dressing.nvim",
+		opts = require("plugins.opts.dressing"),
+	},
+	{
+		"anuvyklack/pretty-fold.nvim",
+		config = require("plugins.config.pretty-fold"),
+		event = "BufRead",
+	},
+	{
+		"nvimtools/none-ls.nvim",
+		dependencies = {
+			"nvimtools/none-ls-extras.nvim",
+		},
+	},
+	{
+		"kelly-lin/ranger.nvim",
+		config = require("plugins.config.ranger"),
+	},
+	{
+		"brenoprata10/nvim-highlight-colors",
+		config = require("plugins.config.highlight-colors"),
+	},
+	{
+		"samodostal/image.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{ "m00qek/baleia.nvim", tag = "v1.4.0", config = true },
+		},
+		config = require("plugins.config.image"),
+	},
+
+	{
+		"kosayoda/nvim-lightbulb",
+		opts = require("plugins.opts.lightbulb"),
+		config = require("plugins.config.lightbulb"),
+		event = "LspAttach",
+	},
 }

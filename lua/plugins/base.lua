@@ -17,6 +17,7 @@ return {
 			require("catppuccin").setup(opts)
 			lvim.colorscheme = "catppuccin-frappe"
 			lvim.builtin.theme.name = "catppuccin"
+			lvim.builtin.lualine.options.theme = "catppuccin"
 		end,
 	},
 	{
